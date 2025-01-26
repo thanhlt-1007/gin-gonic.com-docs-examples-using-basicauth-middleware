@@ -5,6 +5,10 @@ import (
     "net/http"
 )
 
+var basicAuthAccounts = gin.Accounts{
+    "foo": "bar",
+}
+
 var users = map[string]any {
     "foo": map[string]string {
         "email": "foo@example.com",
@@ -36,9 +40,7 @@ func getAdminUserHandler(context *gin.Context) {
 func main() {
     engine := gin.Default()
 
-    adminGroup := engine.Group("/admin", gin.BasicAuth(gin.Accounts{
-        "foo": "bar",
-    }))
+    adminGroup := engine.Group("/admin", gin.BasicAuth(basicAuthAccounts))
 
     adminGroup.GET("/user", getAdminUserHandler)
     engine.Run()
