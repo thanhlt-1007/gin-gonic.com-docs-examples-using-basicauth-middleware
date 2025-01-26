@@ -16,6 +16,10 @@ var users = map[string]any {
     },
 }
 
+func basicAuthMiddleware() gin.HandlerFunc {
+    return gin.BasicAuth(basicAuthAccounts)
+}
+
 func getAdminUserHandler(context *gin.Context) {
     user := context.MustGet(gin.AuthUserKey).(string)
     userData, ok := users[user]
@@ -40,7 +44,7 @@ func getAdminUserHandler(context *gin.Context) {
 func main() {
     engine := gin.Default()
 
-    adminGroup := engine.Group("/admin", gin.BasicAuth(basicAuthAccounts))
+    adminGroup := engine.Group("/admin", basicAuthMiddleware())
 
     adminGroup.GET("/user", getAdminUserHandler)
     engine.Run()
